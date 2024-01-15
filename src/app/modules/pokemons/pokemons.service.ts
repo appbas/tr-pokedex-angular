@@ -1,8 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
+import {
+  mergeMap,
+  mergeAll,
+  switchMap,
+  concatAll,
+  concatMap,
+  concatWith,
+} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { PokemonType } from './models/pokemon.type';
+import { PokemonTypesType } from './models/pokemon-types.type';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +26,6 @@ export class PokemonsService {
       .get<PokemonType>(this.API + `pokemon/?offset=0&limit=2;`)
       .pipe(
         map((result: any) => result.results as []),
-        // map((r) => [r.pop()]),
         map((results) =>
           results.map(
             (item: any) =>
@@ -27,8 +35,24 @@ export class PokemonsService {
                 url: item.url,
               } as PokemonType)
           )
-        ),
-        tap(console.log)
+        )
+      );
+  }
+
+  getTypesById(id: string): Observable<PokemonTypesType[]> {
+    return this._httpClient
+      .get<PokemonTypesType>(this.API + `pokemon/${id}`)
+      .pipe(
+        map((result: any) => result.types as any),
+        map((results) =>
+          results.map(
+            (item: any) =>
+              ({
+                slot: item.slot,
+                name: item.type.name,
+              } as PokemonTypesType)
+          )
+        )
       );
   }
 }
