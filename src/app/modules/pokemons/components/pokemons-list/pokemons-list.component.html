@@ -1,5 +1,7 @@
 <div class="pokemon-list">
-  <ng-container *ngFor="let pokemon of pokemonsList$ | async">
-    <app-pokemons-card [pokemon]="pokemon"></app-pokemons-card>
+  <ng-container *ngIf="pokemonsList$ | async as pokemonsResult">
+    <ng-container *ngFor="let pokemon of pokemonsResult.result">
+      <app-pokemons-card [pokemon]="pokemon"></app-pokemons-card>
+    </ng-container>
   </ng-container>
 </div>

@@ -1,21 +1,7 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { PokemonsStore } from '../../store/pokemons.store';
 import { PokemonsCardComponent } from '../pokemons-card/pokemons-card.component';
-import { PokemonsService } from '../../pokemons.service';
-import {
-  concatAll,
-  concatWith,
-  filter,
-  map,
-  merge,
-  mergeAll,
-  mergeMap,
-  of,
-  switchMap,
-  tap,
-  toArray,
-} from 'rxjs';
-import { PokemonType } from '../../models/pokemon.type';
 
 @Component({
   selector: 'app-pokemons-list',
@@ -24,25 +10,21 @@ import { PokemonType } from '../../models/pokemon.type';
   templateUrl: './pokemons-list.component.html',
   styleUrls: ['./pokemons-list.component.scss'],
 })
-export class PokemonsListComponent {
-  private _pokemonService = inject(PokemonsService);
+export class PokemonsListComponent implements OnInit, OnDestroy {
+  private _pokemonsStore = inject(PokemonsStore);
 
-  pokemonsList$ = this._pokemonService.list().pipe(
-    mergeAll(),
-    map((pokemon) =>
-      this._pokemonService.getTypesById(pokemon.id as string).pipe(
-        map(
-          (types) =>
-            ({
-              ...pokemon,
-              types,
-            } as PokemonType)
-        )
-      )
-    ),
-    concatAll(),
-    toArray()
-  );
+  pokemonsList$ = this._pokemonsStore.selectPokemons$;
 
   constructor() {}
+
+  ngOnInit(): void {
+    console.log('PokemonsListComponent', 'init');
+    if (!this._pokemonsStore.hasResult()) {
+      this._pokemonsStore.pokemonsSearch();
+    }
+  }
+
+  ngOnDestroy(): void {
+    console.log('PokemonsListComponent', 'destroy');
+  }
 }
