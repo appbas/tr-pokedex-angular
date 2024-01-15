@@ -1,7 +1,7 @@
-@import '../../../../../assets/scss/variables';
+@import "../../../../../assets/scss/variables";
 
 .pokemon-card {
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: $radius;
   padding: $padding-md;
   width: 100%;
@@ -16,7 +16,6 @@
       }
     }
   }
-  
 
   .pokemon-card-item {
     display: flex;
@@ -28,8 +27,8 @@
     font-size: 22px;
   }
 
-  .pokemon-ability {
-    background-color: #EFEFEF;
+  .pokemon-types {
+    background-color: #efefef;
     font-weight: 400;
     padding: calc($padding-sm / 2) $padding-md;
     height: 1rem;
@@ -43,12 +42,12 @@
   .pokemon-img {
     width: 110px;
     height: 90px;
-    background-image: url('../../../../../assets/imgs/bg-bolinhas.png');
+    background-image: url("../../../../../assets/imgs/bg-bolinhas.png");
     display: flex;
     align-items: center;
     justify-content: center;
     > img {
-      transition: transform .3s ease-in-out;
+      transition: transform 0.3s ease-in-out;
     }
   }
 
@@ -57,5 +56,4 @@
     flex: 1;
     align-items: end;
   }
-
 }

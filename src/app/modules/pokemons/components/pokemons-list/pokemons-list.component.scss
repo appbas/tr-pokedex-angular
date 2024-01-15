@@ -1,4 +1,4 @@
-@import '../../../../../assets/scss/variables';
+@import "../../../../../assets/scss/variables";
 
 .pokemon-list {
   display: grid;
@@ -6,5 +6,23 @@
   grid-auto-rows: 157px;
   gap: 20px;
   height: calc(100dvh - ($padding-lg * 4));
-  overflow: auto;
-} 
+  overflow: hidden;
+  transition: overflow 0.3s ease-in-out;
+
+  &:hover {
+    overflow: auto;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.4em;
+  }
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-thumb {
+    overflow: visible;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    --bg: $secondary-rgb;
+    background: $secondary-rgb;
+  }
+}
