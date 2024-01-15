@@ -1,0 +1,10 @@
+@import '../../../../../assets/scss/variables';
+
+.pokemon-list {
+  display: grid;
+  grid-template-columns: repeat(2, 290px);
+  grid-auto-rows: 157px;
+  gap: 20px;
+  height: calc(100dvh - ($padding-lg * 4));
+  overflow: auto;
+} 

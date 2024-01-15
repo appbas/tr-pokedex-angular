@@ -1,0 +1,5 @@
+<div class="pokemon-list">
+  <ng-container *ngFor="let pokemon of pokemonsList$ | async">
+    <app-pokemons-card [pokemon]="pokemon"></app-pokemons-card>
+  </ng-container>
+</div>
