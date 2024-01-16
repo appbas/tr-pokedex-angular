@@ -5,6 +5,7 @@ import {
   map,
   mergeAll,
   Observable,
+  OperatorFunction,
   switchMap,
   tap,
   toArray,
@@ -93,40 +94,47 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
           },
         })
       ),
-      switchMap(() =>
-        this._pokemonsService.list(this.updateAndGetFilterPokemon()).pipe(
-          mergeAll(),
-          map((pokemon) =>
-            this._pokemonsService.getPokemonDetails(pokemon.id as string).pipe(
-              map(
-                (result) =>
-                  ({
-                    ...pokemon,
-                    types: result.types,
-                    stats: result.stats,
-                  } as PokemonType)
-              )
-            )
-          ),
-          concatAll(),
-          toArray(),
-          withLatestFrom(this.state$),
-          tap(([results, state]) =>
-            this.patchState({
-              pokemons: {
-                state:
-                  !!results && results.length > 0
-                    ? StateEnum.success
-                    : StateEnum.noResults,
-                result: [...state.pokemons.result, ...results],
-                resultFilter: [...state.pokemons.result, ...results],
-              },
-            })
-          )
-        )
-      )
+      this.searchDetails()
     )
   );
+
+  private searchDetails(): OperatorFunction<
+    unknown,
+    [PokemonType[], PokemonState]
+  > {
+    return switchMap(() =>
+      this._pokemonsService.list(this.updateAndGetFilterPokemon()).pipe(
+        mergeAll(),
+        map((pokemon) =>
+          this._pokemonsService.getPokemonDetails(pokemon.id as string).pipe(
+            map(
+              (result) =>
+                ({
+                  ...pokemon,
+                  types: result.types,
+                  stats: result.stats,
+                } as PokemonType)
+            )
+          )
+        ),
+        concatAll(),
+        toArray(),
+        withLatestFrom(this.state$),
+        tap(([results, state]) =>
+          this.patchState({
+            pokemons: {
+              state:
+                !!results && results.length > 0
+                  ? StateEnum.success
+                  : StateEnum.noResults,
+              result: [...state.pokemons.result, ...results],
+              resultFilter: [...state.pokemons.result, ...results],
+            },
+          })
+        )
+      )
+    );
+  }
 
   readonly japoneseNameById = this.effect((pokemonId$: Observable<string>) =>
     pokemonId$.pipe(

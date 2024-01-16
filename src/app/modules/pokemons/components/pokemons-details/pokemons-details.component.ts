@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PokemonsStore } from '../../store/pokemons.store';
@@ -14,9 +14,12 @@ import { PokemonsStore } from '../../store/pokemons.store';
 })
 export class PokemonsDetailsComponent implements OnInit, OnDestroy {
   private _activatedRoute = inject(ActivatedRoute);
+  private _router = inject(Router);
   private _pokemonsStore = inject(PokemonsStore);
 
-  pokemon$ = this._pokemonsStore.selectPokemon$;
+  pokemon$ = this._pokemonsStore.selectPokemon$.pipe(
+    tap((pokemon) => !!!pokemon && this._router.navigateByUrl(''))
+  );
   japoneseName$ = this._pokemonsStore.selectJaponeseName$;
 
   protected params$ = this._activatedRoute.params.pipe(

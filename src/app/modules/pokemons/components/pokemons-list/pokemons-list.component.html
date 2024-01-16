@@ -10,7 +10,7 @@
 <div class="pokemon-list" #pokemonList>
   <ng-container *ngIf="pokemonsList$ | async as pokemonsResult">
     <ng-container *ngIf="pokemonsResult.state === 4">
-      <div class="no-results">sdlkjf</div>
+      <div class="no-results">Pokémon não encontrado 🤔</div>
     </ng-container>
     <ng-container *ngIf="pokemonsResult.state !== 4">
       <ng-container
