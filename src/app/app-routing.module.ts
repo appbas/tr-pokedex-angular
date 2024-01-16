@@ -1,12 +1,12 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { TemplatesComponent } from "./core/templates/templates.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { TemplatesComponent } from './core/templates/templates.component';
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     loadChildren: () =>
-      import("./core/templates/templates.routes").then((r) => r.routes),
+      import('./core/templates/templates.routes').then((r) => r.routes),
   },
 ];
 

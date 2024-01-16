@@ -1,10 +1,48 @@
-@import '../../../../../assets/scss/variables';
+@import "../../../../../assets/scss/variables";
 
 .pokemon-list {
   display: grid;
   grid-template-columns: repeat(2, 290px);
-  grid-auto-rows: 157px;
+  grid-auto-rows: 39.25px;
   gap: 20px;
-  height: calc(100dvh - ($padding-lg * 4));
-  overflow: auto;
-} 
+  height: calc(100dvh - ($padding-lg * 8.2));
+  overflow-y: hidden;
+  overflow-x: hidden;
+  transition: overflow 0.3s ease-in-out;
+  scroll-behavior: smooth;
+
+  &:hover {
+    overflow-y: auto;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.4em;
+  }
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-thumb {
+    overflow: visible;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    --bg: $secondary-rgb;
+    background: $secondary-rgb;
+  }
+}
+
+.grid-idem {
+  grid-row: span 3;
+}
+
+.message-search {
+  grid-column: span 2;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  gap: 0.5rem;
+  .loading {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+  }
+}

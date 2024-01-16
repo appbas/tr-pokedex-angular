@@ -1,11 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap');
-@import './assets/scss/variables';
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import "./assets/scss/variables";
 
 /*
   1. Use a more-intuitive box-sizing model.
 */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 /*
@@ -23,7 +25,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   background-color: $bg-color;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .flex {
@@ -34,12 +36,91 @@ body {
   flex-direction: column;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
+.w-full {
+  width: 100%;
+}
+
 .g-1 {
-  gap: .25rem;
+  gap: 0.25rem;
 }
 
 img {
   user-select: none;
   touch-action: none;
   pointer-events: none;
+}
+
+.p-3 {
+  padding: $padding-lg;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  background-color: $secondary;
+  padding: $padding-sm;
+  text-align: center;
+  border-radius: $radius;
+  font-size: 18px;
+  font-weight: 400;
+  color: #fff;
+  text-decoration: none;
+}
+
+.input-wrapper {
+  position: relative;
+  > input {
+    width: calc(100% - 0.4rem);
+    padding: $padding-lg;
+    background-color: rgba(#fff, 0.2);
+    margin: $padding-md 0;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 300;
+    padding-right: 3.5rem;
+
+    &::placeholder {
+      color: #fff;
+      font-size: 18px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 300;
+    }
+  }
+
+  > .search-icon {
+    position: absolute;
+    color: #fff;
+    font-size: 2rem;
+    margin-left: -3.5rem;
+    margin-top: 2.2rem;
+    touch-action: none;
+    pointer-events: none;
+  }
+}
+
+// animateds
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }

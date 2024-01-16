@@ -1,1 +1,32 @@
-<p>pokemons-details works!</p>
+<ng-container *ngIf="params$ | async as param">
+  <ng-container *ngIf="pokemon$ | async as pokemon">
+    <div class="container-details">
+      <ng-container *ngIf="japoneseName$ | async as japoneseName">
+        <div
+          class="pokemon-details-name"
+          [attr.data-name]="
+            japoneseName.state === 1 ? 'loading' : japoneseName.result ?? ''
+          "
+        >
+          {{ pokemon.name }}
+        </div>
+      </ng-container>
+      <div class="pokemon-details-wrapper">
+        <img class="pokemon-img-details" [src]="getPokemonImage(pokemon.id)" />
+        <div class="pokemon-details-data flex column flex-1">
+          <span class="pokemon-details-title">Estatísticas</span>
+
+          <div class="pokemon-stats">
+            <div class="pokemon-stats-item" *ngFor="let item of pokemon.stats">
+              <span class="stat-name">{{ item.statName }}</span>
+              <span class="stat-value">{{ item.baseStat }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-3">
+          <a [routerLink]="['']" class="btn">voltar</a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
