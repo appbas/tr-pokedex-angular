@@ -1,3 +1,4 @@
+import { PokemonDetailsType } from './pokemon-details.type';
 import { PokemonTypesType } from './pokemon-types.type';
 
 export type PokemonType = {
@@ -5,4 +6,6 @@ export type PokemonType = {
   name: string;
   url: string;
   types: PokemonTypesType[] | null;
+  stats: PokemonDetailsType[] | null;
+  japoneseName: string | null;
 };

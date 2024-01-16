@@ -1,3 +1,7 @@
+<div class="input-wrapper">
+  <input type="text" placeholder="Buscar Pokemon..." />
+  <span class="search-icon material-symbols-outlined"> search </span>
+</div>
 <div class="pokemon-list">
   <ng-container *ngIf="pokemonsList$ | async as pokemonsResult">
     <ng-container *ngFor="let pokemon of pokemonsResult.result">
