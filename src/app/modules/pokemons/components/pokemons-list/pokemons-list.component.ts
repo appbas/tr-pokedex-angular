@@ -63,17 +63,20 @@ export class PokemonsListComponent implements OnInit, OnDestroy {
   }
 
   private onScrollPokemonList(): void {
-    const element = this.pokemonListElement.nativeElement;
-    const scrollEnd = element.scrollHeight - element.scrollTop - 50;
-    const clientHeight = element.clientHeight - 50;
+    const t = setTimeout(() => {
+      clearTimeout(t);
+      const element = this.pokemonListElement.nativeElement;
+      const scrollEnd = element.scrollHeight - element.scrollTop - 50;
+      const clientHeight = element.clientHeight - 50;
 
-    if (
-      scrollEnd === clientHeight &&
-      this._pokemonsStore.isPokemonSearchNotLoading() &&
-      !this._pokemonsStore.isPokemonSearchByName()
-    ) {
-      this._pokemonsStore.pokemonsSearch();
-    }
+      if (
+        scrollEnd >= clientHeight &&
+        this._pokemonsStore.isPokemonSearchNotLoading() &&
+        !this._pokemonsStore.isPokemonSearchByName()
+      ) {
+        this._pokemonsStore.pokemonsSearch();
+      }
+    }, 100);
   }
 
   trackByPokemonList(_: number, pokemon: PokemonType): string {
