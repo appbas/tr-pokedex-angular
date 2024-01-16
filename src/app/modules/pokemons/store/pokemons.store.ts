@@ -170,6 +170,12 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
               .toLowerCase()
               .includes(pokemonName!.toLowerCase());
           });
+
+          const state =
+            !!resultFilter && resultFilter.length > 0
+              ? StateEnum.success
+              : StateEnum.noResults;
+
           this.patchState({
             filterPokemon: {
               ...this.get().filterPokemon,
@@ -177,6 +183,7 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
             },
             pokemons: {
               ...this.get().pokemons,
+              state,
               resultFilter,
             },
           });

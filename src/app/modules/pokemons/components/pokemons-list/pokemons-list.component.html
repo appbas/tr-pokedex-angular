@@ -9,16 +9,21 @@
 </div>
 <div class="pokemon-list" #pokemonList>
   <ng-container *ngIf="pokemonsList$ | async as pokemonsResult">
-    <ng-container
-      *ngFor="
-        let pokemon of pokemonsResult.resultFilter;
-        trackBy: trackByPokemonList
-      "
-    >
-      <app-pokemons-card
-        class="grid-idem"
-        [pokemon]="pokemon"
-      ></app-pokemons-card>
+    <ng-container *ngIf="pokemonsResult.state === 4">
+      <div class="no-results">sdlkjf</div>
+    </ng-container>
+    <ng-container *ngIf="pokemonsResult.state !== 4">
+      <ng-container
+        *ngFor="
+          let pokemon of pokemonsResult.resultFilter;
+          trackBy: trackByPokemonList
+        "
+      >
+        <app-pokemons-card
+          class="grid-idem"
+          [pokemon]="pokemon"
+        ></app-pokemons-card>
+      </ng-container>
     </ng-container>
   </ng-container>
   <ng-container *ngIf="pokemonsList$ | async as pokemonsResult">
