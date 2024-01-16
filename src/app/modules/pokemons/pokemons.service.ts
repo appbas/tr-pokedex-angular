@@ -8,6 +8,11 @@ import { PokemonDetailsType } from './models/pokemon-details.type';
 import { PokemonTypesType } from './models/pokemon-types.type';
 import { PokemonType } from './models/pokemon.type';
 
+type PokemonDetailsAPIType = {
+  stats: any[];
+  types: [];
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -37,37 +42,38 @@ export class PokemonsService {
       );
   }
 
-  getTypesById(id: string): Observable<PokemonTypesType[]> {
+  getPokemonDetails(id: string): Observable<PokemonDetailsAPIType> {
     return this._httpClient
       .get<PokemonTypesType>(this.API + `pokemon/${id}`)
       .pipe(
-        map((result: any) => result.types as any),
-        map((results) =>
-          results.map(
+        map(
+          (result: any) =>
+            ({
+              types: result.types as any[],
+              stats: result.stats as any,
+            } as PokemonDetailsAPIType)
+        ),
+        map((results) => {
+          const types = results.types.map(
             (item: any) =>
               ({
                 slot: item.slot,
                 name: item.type.name,
               } as PokemonTypesType)
-          )
-        )
-      );
-  }
-
-  getStatsById(id: string): Observable<PokemonDetailsType[]> {
-    return this._httpClient
-      .get<PokemonTypesType>(this.API + `pokemon/${id}`)
-      .pipe(
-        map((result: any) => result.stats as any),
-        map((results) =>
-          results.map(
+          );
+          const stats = results.stats.map(
             (item: any) =>
               ({
                 statName: item.stat.name,
                 baseStat: item.base_stat,
               } as PokemonDetailsType)
-          )
-        )
+          );
+
+          return {
+            types,
+            stats,
+          } as PokemonDetailsAPIType;
+        })
       );
   }
 

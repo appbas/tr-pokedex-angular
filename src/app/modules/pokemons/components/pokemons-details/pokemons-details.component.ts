@@ -27,9 +27,7 @@ export class PokemonsDetailsComponent implements OnInit, OnDestroy {
     })
   );
 
-  ngOnInit(): void {
-    this._activatedRoute.params.forEach(console.log);
-  }
+  ngOnInit(): void {}
 
   getPokemonImage(id: string | number) {
     return environment.pokeImgs.concat(id as string).concat('.svg');

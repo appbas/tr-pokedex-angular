@@ -97,23 +97,15 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
         this._pokemonsService.list(this.updateAndGetFilterPokemon()).pipe(
           mergeAll(),
           map((pokemon) =>
-            this._pokemonsService.getTypesById(pokemon.id as string).pipe(
+            this._pokemonsService.getPokemonDetails(pokemon.id as string).pipe(
               map(
-                (types) =>
+                (result) =>
                   ({
                     ...pokemon,
-                    types,
+                    types: result.types,
+                    stats: result.stats,
                   } as PokemonType)
               )
-            )
-          ),
-          mergeAll(),
-          map((pokemon) =>
-            this._pokemonsService.getStatsById(pokemon.id as string).pipe(
-              map((stats) => ({
-                ...pokemon,
-                stats,
-              }))
             )
           ),
           concatAll(),
@@ -219,6 +211,10 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
 
   isPokemonSearchNotLoading(): boolean {
     return this.get().pokemons.state !== 1;
+  }
+
+  getPokemonNameSearch(): string {
+    return this.get().filterPokemon?.pokemonName ?? '';
   }
 
   isPokemonSearchByName(): boolean {

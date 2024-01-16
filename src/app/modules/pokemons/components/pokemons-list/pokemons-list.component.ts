@@ -23,11 +23,13 @@ import { PokemonsCardComponent } from '../pokemons-card/pokemons-card.component'
 export class PokemonsListComponent implements OnInit, OnDestroy {
   @ViewChild('pokemonList', { static: true })
   pokemonListElement!: ElementRef<HTMLDivElement>;
-  pokemonNameControl = new FormControl<string>('');
 
   private _pokemonsStore = inject(PokemonsStore);
 
   pokemonsList$ = this._pokemonsStore.selectPokemons$;
+  pokemonNameControl = new FormControl<string>(
+    this._pokemonsStore.getPokemonNameSearch()
+  );
 
   private unsubscribe = new Subject();
 
@@ -43,7 +45,6 @@ export class PokemonsListComponent implements OnInit, OnDestroy {
       'scroll',
       this.onScrollPokemonList.bind(this)
     );
-    console.log('PokemonsListComponent', 'init');
     if (!this._pokemonsStore.hasResult()) {
       this._pokemonsStore.pokemonsSearch();
     }
@@ -86,6 +87,5 @@ export class PokemonsListComponent implements OnInit, OnDestroy {
       'scroll',
       this.onScrollPokemonList.bind(this)
     );
-    console.log('PokemonsListComponent', 'destroy');
   }
 }
