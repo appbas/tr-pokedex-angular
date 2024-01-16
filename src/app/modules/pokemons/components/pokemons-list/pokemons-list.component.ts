@@ -64,8 +64,8 @@ export class PokemonsListComponent implements OnInit, OnDestroy {
 
   private onScrollPokemonList(): void {
     const element = this.pokemonListElement.nativeElement;
-    const scrollEnd = element.scrollHeight - element.scrollTop - 20;
-    const clientHeight = element.clientHeight - 20;
+    const scrollEnd = element.scrollHeight - element.scrollTop - 50;
+    const clientHeight = element.clientHeight - 50;
 
     if (
       scrollEnd === clientHeight &&
