@@ -25,6 +25,7 @@
   .pokemon-name {
     font-weight: 900;
     font-size: 22px;
+    text-transform: capitalize;
   }
 
   .pokemon-types {
@@ -32,7 +33,7 @@
     font-weight: 400;
     padding: calc($padding-sm / 2) $padding-md;
     height: 1rem;
-    font-size: 10px;
+    font-size: 11px;
     border-radius: $radius;
     width: fit-content;
     display: flex;
