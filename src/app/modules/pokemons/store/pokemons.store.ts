@@ -1,15 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import {
-  map,
-  switchMap,
   concatAll,
-  tap,
+  map,
   mergeAll,
-  toArray,
   Observable,
+  switchMap,
+  tap,
+  toArray,
+  withLatestFrom,
 } from 'rxjs';
-import { PokemonDetailsType } from '../models/pokemon-details.type';
+import { FilterPokemonType } from '../models/filter-pokemon.type';
 import { PokemonType } from '../models/pokemon.type';
 import { PokemonsService } from '../pokemons.service';
 
@@ -24,23 +25,31 @@ export enum StateEnum {
 export interface ResultState<T> {
   state: StateEnum;
   result: T;
+  resultFilter: T;
 }
 
 export type PokemonState = {
-  pokemons: ResultState<PokemonType[] | null>;
+  filterPokemon: FilterPokemonType;
+  pokemons: ResultState<PokemonType[]>;
   pokemon: PokemonType | null | undefined;
   japoneseName: ResultState<string | null>;
 };
 
 const initialState: PokemonState = {
+  filterPokemon: {
+    offset: -1,
+    limit: 20,
+  } as FilterPokemonType,
   pokemons: {
     state: StateEnum.idle,
-    result: null,
+    result: [],
+    resultFilter: [],
   },
   pokemon: null,
   japoneseName: {
     state: StateEnum.idle,
     result: null,
+    resultFilter: null,
   },
 };
 
@@ -79,12 +88,13 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
         this.patchState({
           pokemons: {
             state: StateEnum.loading,
-            result: null,
+            result: this.get().pokemons.result,
+            resultFilter: this.get().pokemons.result,
           },
         })
       ),
       switchMap(() =>
-        this._pokemonsService.list().pipe(
+        this._pokemonsService.list(this.updateAndGetFilterPokemon()).pipe(
           mergeAll(),
           map((pokemon) =>
             this._pokemonsService.getTypesById(pokemon.id as string).pipe(
@@ -108,14 +118,16 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
           ),
           concatAll(),
           toArray(),
-          tap((results) =>
+          withLatestFrom(this.state$),
+          tap(([results, state]) =>
             this.patchState({
               pokemons: {
                 state:
-                  !!results && results.length
+                  !!results && results.length > 0
                     ? StateEnum.success
                     : StateEnum.noResults,
-                result: results,
+                result: [...state.pokemons.result, ...results],
+                resultFilter: [...state.pokemons.result, ...results],
               },
             })
           )
@@ -131,6 +143,7 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
           japoneseName: {
             state: StateEnum.loading,
             result: null,
+            resultFilter: null,
           },
         })
       ),
@@ -144,6 +157,7 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
                     ? StateEnum.success
                     : StateEnum.noResults,
                 result: japoneseName,
+                resultFilter: null,
               },
             })
           )
@@ -151,6 +165,45 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
       )
     )
   );
+
+  readonly searchPokemonByName = this.effect(
+    (pokemonName$: Observable<string | null>) =>
+      pokemonName$.pipe(
+        tap((pokemonName) => {
+          const resultFilter = this.get().pokemons.result.filter((pokemon) => {
+            if (!!!pokemonName) {
+              return true;
+            }
+            return pokemon.name
+              .toLowerCase()
+              .includes(pokemonName!.toLowerCase());
+          });
+          this.patchState({
+            filterPokemon: {
+              ...this.get().filterPokemon,
+              pokemonName,
+            },
+            pokemons: {
+              ...this.get().pokemons,
+              resultFilter,
+            },
+          });
+        })
+      )
+  );
+
+  updateAndGetFilterPokemon(): FilterPokemonType {
+    const filterOld = this.get().filterPokemon;
+    const filterNew = {
+      ...filterOld,
+      offset: filterOld.offset === -1 ? 0 : filterOld.offset + filterOld.limit,
+    };
+    this.patchState({
+      filterPokemon: filterNew,
+    });
+
+    return filterNew;
+  }
 
   clearPokemonSelected(): void {
     this.patchState({
@@ -162,5 +215,16 @@ export class PokemonsStore extends ComponentStore<PokemonState> {
   hasResult(): boolean {
     const pokemons = this.get().pokemons;
     return !!pokemons && !!pokemons.result && pokemons.result?.length > 0;
+  }
+
+  isPokemonSearchNotLoading(): boolean {
+    return this.get().pokemons.state !== 1;
+  }
+
+  isPokemonSearchByName(): boolean {
+    const filter = this.get().filterPokemon;
+    return (
+      !!filter && !!filter.pokemonName && filter.pokemonName.trim().length > 0
+    );
   }
 }

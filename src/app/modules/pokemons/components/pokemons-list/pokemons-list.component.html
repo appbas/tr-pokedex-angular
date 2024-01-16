@@ -1,11 +1,34 @@
 <div class="input-wrapper">
-  <input type="text" placeholder="Buscar Pokemon..." />
+  <input
+    type="text"
+    maxlength="100"
+    placeholder="Buscar Pokemon..."
+    [formControl]="pokemonNameControl"
+  />
   <span class="search-icon material-symbols-outlined"> search </span>
 </div>
-<div class="pokemon-list">
+<div class="pokemon-list" #pokemonList>
   <ng-container *ngIf="pokemonsList$ | async as pokemonsResult">
-    <ng-container *ngFor="let pokemon of pokemonsResult.result">
-      <app-pokemons-card [pokemon]="pokemon"></app-pokemons-card>
+    <ng-container
+      *ngFor="
+        let pokemon of pokemonsResult.resultFilter;
+        trackBy: trackByPokemonList
+      "
+    >
+      <app-pokemons-card
+        class="grid-idem"
+        [pokemon]="pokemon"
+      ></app-pokemons-card>
     </ng-container>
+  </ng-container>
+  <ng-container *ngIf="pokemonsList$ | async as pokemonsResult">
+    <div class="message-search" *ngIf="pokemonsResult.state === 1">
+      <div>
+        <span class="loading material-symbols-outlined">
+          progress_activity
+        </span>
+      </div>
+      <span>Loading...</span>
+    </div>
   </ng-container>
 </div>

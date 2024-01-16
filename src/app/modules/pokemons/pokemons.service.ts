@@ -1,21 +1,12 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, of } from 'rxjs';
-import {
-  mergeMap,
-  mergeAll,
-  switchMap,
-  concatAll,
-  concatMap,
-  concatWith,
-  tap,
-  filter,
-  catchError,
-} from 'rxjs/operators';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { PokemonType } from './models/pokemon.type';
-import { PokemonTypesType } from './models/pokemon-types.type';
+import { FilterPokemonType } from './models/filter-pokemon.type';
 import { PokemonDetailsType } from './models/pokemon-details.type';
+import { PokemonTypesType } from './models/pokemon-types.type';
+import { PokemonType } from './models/pokemon.type';
 
 @Injectable({
   providedIn: 'root',
@@ -25,9 +16,12 @@ export class PokemonsService {
 
   private readonly API = environment.pokeapi;
 
-  list(): Observable<PokemonType[]> {
+  list(filterPokemon: FilterPokemonType): Observable<PokemonType[]> {
     return this._httpClient
-      .get<PokemonType>(this.API + `pokemon/?offset=0&limit=2;`)
+      .get<PokemonType>(
+        this.API +
+          `pokemon/?offset=${filterPokemon.offset}&limit=${filterPokemon.limit}`
+      )
       .pipe(
         map((result: any) => result.results as []),
         map((results) =>
