@@ -1,0 +1,47 @@
+/* Breakpoint sizes */
+$screen-xs-min: 320px;
+$screen-sm-min: 544px;
+$screen-md-min: 768px;
+$screen-lg-min: 1024px;
+
+/* Create the mixin (usually in a separate .scss file) */
+@mixin breakpoint($media) {
+  @if $media == xs {
+    @media only screen and (min-width: $screen-xs-min) {
+      @content;
+    }
+  } @else if $media == sm {
+    @media only screen and (min-width: $screen-sm-min) {
+      @content;
+    }
+  } @else if $media == md {
+    @media only screen and (min-width: $screen-md-min) {
+      @content;
+    }
+  } @else if $media == lg {
+    @media only screen and (min-width: $screen-lg-min) {
+      @content;
+    }
+  }
+}
+
+.box {
+  display: inline-block;
+  padding: 2rem;
+  background: slateblue; /* Mobile first */
+  color: white;
+  border-radius: 3px;
+  transition: background 250ms ease-in;
+
+  @include breakpoint(sm) {
+    background: tomato; /* 544px and up */
+  }
+
+  @include breakpoint(md) {
+    background: cornflowerblue; /* 768px and up */
+  }
+
+  @include breakpoint(lg) {
+    background: teal; /* 1024px and up */
+  }
+}

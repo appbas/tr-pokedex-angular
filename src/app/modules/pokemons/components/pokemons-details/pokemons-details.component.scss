@@ -46,6 +46,7 @@
     .pokemon-details-data {
       padding: $padding-md;
       padding-bottom: 0;
+      overflow-y: auto;
 
       .pokemon-details-title {
         font-size: 32px;

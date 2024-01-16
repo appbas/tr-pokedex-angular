@@ -1,5 +1,8 @@
+@import "../../../assets/scss/variables";
+
 .container {
   width: 100%;
-  max-width: calc(600px + 0.4rem);
+  max-width: calc(633px + 0.4rem);
   margin: 0 auto;
+  padding: 0 $padding-md;
 }

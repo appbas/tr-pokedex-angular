@@ -2,18 +2,14 @@
 
 .pokemon-list {
   display: grid;
-  grid-template-columns: repeat(2, 290px);
+  grid-template-columns: repeat(1, auto-fill);
   grid-auto-rows: 39.25px;
   gap: 20px;
   height: calc(100dvh - ($padding-lg * 8.2));
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
   transition: overflow 0.3s ease-in-out;
   scroll-behavior: smooth;
-
-  &:hover {
-    overflow-y: auto;
-  }
 
   &::-webkit-scrollbar {
     width: 0.4em;
@@ -34,7 +30,7 @@
 }
 
 .message-search {
-  grid-column: span 2;
+  grid-column: span 1;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -44,5 +40,30 @@
     -webkit-animation: spin 4s linear infinite;
     -moz-animation: spin 4s linear infinite;
     animation: spin 4s linear infinite;
+  }
+}
+
+.no-results {
+  grid-column: span 2;
+  grid-row: 6;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  color: #fff;
+  gap: 0.5rem;
+  background-color: red;
+}
+
+@import "../../../../../assets/scss/mixins";
+
+@include breakpoint(md) {
+  .pokemon-list {
+    grid-template-columns: repeat(2, 290px);
+  }
+
+  .message-search {
+    grid-column: span 2;
   }
 }
