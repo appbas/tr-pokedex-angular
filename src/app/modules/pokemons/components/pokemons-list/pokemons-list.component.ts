@@ -69,8 +69,11 @@ export class PokemonsListComponent implements OnInit, OnDestroy {
       const scrollEnd = element.scrollHeight - element.scrollTop - 50;
       const clientHeight = element.clientHeight - 50;
 
+      const quantity = Number((scrollEnd / clientHeight).toPrecision(1));
+      const value = quantity === 0 ? scrollEnd : scrollEnd / quantity;
+
       if (
-        scrollEnd >= clientHeight &&
+        value >= clientHeight &&
         this._pokemonsStore.isPokemonSearchNotLoading() &&
         !this._pokemonsStore.isPokemonSearchByName()
       ) {
