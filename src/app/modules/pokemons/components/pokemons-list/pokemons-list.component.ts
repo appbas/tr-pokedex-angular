@@ -66,14 +66,17 @@ export class PokemonsListComponent implements OnInit, OnDestroy {
     const t = setTimeout(() => {
       clearTimeout(t);
       const element = this.pokemonListElement.nativeElement;
-      const scrollEnd = element.scrollHeight - element.scrollTop - 50;
-      const clientHeight = element.clientHeight - 50;
+      const scrollEnd = element.scrollHeight - element.scrollTop;
+      const clientHeight = element.clientHeight;
 
       const quantity = Number((scrollEnd / clientHeight).toPrecision(1));
-      const value = quantity === 0 ? scrollEnd : scrollEnd / quantity;
+      const value =
+        quantity === 0
+          ? scrollEnd
+          : scrollEnd / (quantity + (quantity > 1 ? 1 : 0));
 
       if (
-        value >= clientHeight &&
+        value >= clientHeight - 50 &&
         this._pokemonsStore.isPokemonSearchNotLoading() &&
         !this._pokemonsStore.isPokemonSearchByName()
       ) {
